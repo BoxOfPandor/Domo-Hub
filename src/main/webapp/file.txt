@@ -1,0 +1,560 @@
+[
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/EchoTTSPartout",
+    "state": "NULL",
+    "editable": true,
+    "type": "String",
+    "name": "EchoTTSPartout",
+    "label": "Text to speech Partout",
+    "tags": [],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT01_VG",
+    "state": "0",
+    "metadata": {
+      "alexa": {
+        "value": "Shutter"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Rollershutter",
+    "name": "CNT01_VG",
+    "label": "Persienne Test",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT03_LE",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Kitchen"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT03_LE",
+    "label": "Néons Cuisine",
+    "category": "",
+    "tags": [
+      "Kitchen"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT07_LA",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT07_LA",
+    "label": "Test 5 Groupe LA CNT07",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT01_LA",
+    "state": "0.0",
+    "metadata": {
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Number",
+    "name": "CNT01_LA",
+    "label": "Groupe Test",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT03_G1",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Kitchen"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT03_G1",
+    "label": "Spots Cuisine",
+    "category": "",
+    "tags": [
+      "Kitchen"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT01_K6",
+    "state": "NULL",
+    "metadata": {
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT01_K6",
+    "label": "Minuterie Test",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_MusicVoiceCommand",
+    "state": "",
+    "stateDescription": {
+      "pattern": "%s",
+      "readOnly": false,
+      "options": []
+    },
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "String",
+    "name": "AmazonEcho_MusicVoiceCommand",
+    "label": "Music Voice Command",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT01_K1",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT01_K1",
+    "label": "Lampe test",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_Volume",
+    "state": "25",
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "Dimmer",
+    "name": "AmazonEcho_Volume",
+    "label": "Volume",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT07_K1",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT07_K1",
+    "label": "Test 1 Lampe simple CNT07",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT02_LA",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_DiningRoom"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT02_LA",
+    "label": "Plafonnier Salle à manger",
+    "category": "",
+    "tags": [
+      "DiningRoom"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT02_LB",
+    "state": "ON",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_DiningRoom"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT02_LB",
+    "label": "Appliques salle à manger",
+    "category": "",
+    "tags": [
+      "DiningRoom"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/EchoTTS",
+    "state": "",
+    "stateDescription": {
+      "pattern": "%s",
+      "readOnly": false,
+      "options": []
+    },
+    "editable": true,
+    "type": "String",
+    "name": "EchoTTS",
+    "label": "Text to speech",
+    "tags": [],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_MediaProgress",
+    "state": "UNDEF",
+    "stateDescription": {
+      "readOnly": false,
+      "options": []
+    },
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "Dimmer",
+    "name": "AmazonEcho_MediaProgress",
+    "label": "Media Progress",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT01_v",
+    "state": "45",
+    "metadata": {
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Dimmer",
+    "name": "CNT01_v",
+    "label": "Gradateur Test V",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT07_K2Ma",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT07_K2Ma",
+    "label": "Test 3 Minuterie Ma CNT07",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_Player",
+    "state": "PAUSE",
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "Player",
+    "name": "AmazonEcho_Player",
+    "label": "Player",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT07_VG",
+    "state": "100",
+    "metadata": {
+      "alexa": {
+        "value": "Shutter"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Rollershutter",
+    "name": "CNT07_VG",
+    "label": "Test 4 Volet VG CNT07",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT03_L8",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT03_L8",
+    "label": "Plafonnier buanderie",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT07_v",
+    "state": "0",
+    "metadata": {
+      "semantics": {
+        "value": "Location_Indoor_Room_Veranda"
+      }
+    },
+    "editable": true,
+    "type": "Dimmer",
+    "name": "CNT07_v",
+    "label": "Test 6 Gradateur CNT07 - v",
+    "category": "",
+    "tags": [
+      "Veranda"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_Title",
+    "state": "",
+    "stateDescription": {
+      "pattern": "%s",
+      "readOnly": true,
+      "options": []
+    },
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "String",
+    "name": "AmazonEcho_Title",
+    "label": "Title",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/AmazonEcho_Start",
+    "state": "",
+    "stateDescription": {
+      "pattern": "String",
+      "readOnly": false,
+      "options": [
+        {
+          "value": "Weather",
+          "label": "Weather"
+        },
+        {
+          "value": "Traffic",
+          "label": "Traffic"
+        },
+        {
+          "value": "GoodMorning",
+          "label": "Good morning"
+        },
+        {
+          "value": "SingASong",
+          "label": "Song"
+        },
+        {
+          "value": "TellStory",
+          "label": "Story"
+        },
+        {
+          "value": "FlashBriefing",
+          "label": "Flash briefing"
+        },
+        {
+          "value": "FlashBriefing.-2098643650",
+          "label": "FlashBriefing"
+        }
+      ]
+    },
+    "commandDescription": {
+      "commandOptions": [
+        {
+          "command": "Weather",
+          "label": "Weather"
+        },
+        {
+          "command": "Traffic",
+          "label": "Traffic"
+        },
+        {
+          "command": "GoodMorning",
+          "label": "Good morning"
+        },
+        {
+          "command": "SingASong",
+          "label": "Song"
+        },
+        {
+          "command": "TellStory",
+          "label": "Story"
+        },
+        {
+          "command": "FlashBriefing",
+          "label": "Flash briefing"
+        },
+        {
+          "command": "FlashBriefing.-2098643650",
+          "label": "FlashBriefing"
+        }
+      ]
+    },
+    "metadata": {
+      "semantics": {
+        "value": "Point"
+      }
+    },
+    "editable": true,
+    "type": "String",
+    "name": "AmazonEcho_Start",
+    "label": "Start",
+    "category": "",
+    "tags": [
+      "Point"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT02_23L1",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_LivingRoom"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT02_23L1",
+    "label": "Ambiance Télé",
+    "category": "",
+    "tags": [
+      "LivingRoom"
+    ],
+    "groupNames": []
+  },
+  {
+    "link": "https://famillepouch.freeboxos.fr:8453/rest/items/CNT02_24L1",
+    "state": "OFF",
+    "metadata": {
+      "alexa": {
+        "value": "Light"
+      },
+      "semantics": {
+        "value": "Location_Indoor_Room_LivingRoom"
+      }
+    },
+    "editable": true,
+    "type": "Switch",
+    "name": "CNT02_24L1",
+    "label": "Meuble Télé",
+    "category": "",
+    "tags": [
+      "LivingRoom"
+    ],
+    "groupNames": []
+  }
+]
