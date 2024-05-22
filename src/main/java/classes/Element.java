@@ -1,13 +1,12 @@
+package classes;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class Item {
+public class Element {
 	public String stIdItem ; 
 	public String stLibItem ;
 	public String stPiece ; 
@@ -17,7 +16,7 @@ public class Item {
 	private static String stDataShellMQTT ; 
 	private static int    iOffsetShellMQTT ;
 	
-	public Item (String astIt, String astLib, int aiType , String astPiece , String astState)
+	public Element (String astIt, String astLib, int aiType , String astPiece , String astState)
 	{
 		stIdItem = astIt; 
 		stLibItem = astLib; 
@@ -43,8 +42,10 @@ public class Item {
 	/* getItems depuis fichier */
 	public static void getItems (PrintWriter printWriter)
 	{
-		if (Constants.dataItems.size() > 0)
-			Constants.dataItems.clear() ;
+		if (DomoHub.dataItems.size() > 0)
+			DomoHub.dataItems.clear() ;
+		
+		/* pour tests : chargement depuis fichier extract
 		try {
      		File myObj = new File("/opt/tomcat/file.txt");
      		Scanner myReader = new Scanner(myObj);
@@ -56,53 +57,53 @@ public class Item {
      		 myReader.close();
     		} catch (FileNotFoundException e) {
         		if (printWriter != null) printWriter.println("!! ERR = "+e.getMessage());
-    		}
+    		}*/
     		
-    		/*
-    		 * 	if (myItem.iTypeAPI == Cst_API_OPENHAB)
-										{
-											String stCURL = Config.get_GlobalParam("DomoSerial", "Curl_OpenHab") ;
-											// zzz stRequete = String.format("curl -s -X 'PUT' --header 'Content-Type: text/plain' -H 'Accept: application/json' -d '%s' 'http://%s/rest/items/%s/state'  -u %s: ",
-											//		stVRTargetMQTT_modif, stCURL , myItem.stUIDBus , stToken );
-											// Exemple requ get equipements : String st_URL_MQTT = String.format("http://%s/rest/items?recursive=false", stCURL);
-											stRequete = String.format("http://%s/rest/items/%s/state -d '%s' ", stCURL , myItem.stUIDBus ,stVRTargetMQTT_modif  );
-										}
-										if (stRequete.length() > 0)
-											coderet = lanceShellMQTT ( stRequete , true, "" , stToken) ;*/
+		int rc = MQTT.getEquipementsMQTT () ;
+		// printWriter.println("<p> Commande : "+MQTT.stTraceLastURL+ "<br>" + MQTT.stTraceLastReq +"</p>"); 
+		// printWriter.println("<p> Erreurs : "+MQTT.stTraceError+ "<br></p>"); 
 			
+		if (rc == 0)
+		{
+			stDataShellMQTT = MQTT.stData ;
+			//printWriter.println("Retour MQTT : "+stDataShellMQTT+"<br>");
 			// Exploitation des donnes dans stDataShellMQTT
-			printWriter.println("Init var GO<br>");
 			String stState = "";
 			String stType = "";
 			String stName = "";
 			String stLabel = "";
+			String stPiece = "";			
 			String stLink = "";
 			int inType = 0;
-			printWriter.println("Init var OK<br>");
-			while (!stState.equals("NoData")) 
+
+			while (!stLink.equals("NoData")) 
 			{
-				//printWriter.println("<br>iOffsetShellMQTT start : " + iOffsetShellMQTT + "<br>");
-				stLink = SearchData("link", printWriter);
+				//printWriter.println("<br>---------- stDataShellMQTT start : " + stDataShellMQTT + "<br>");
+				stLink = SearchData("link", printWriter); // positionnement au début du prochain "link"
 				stState = SearchData("state", printWriter);
 				stType = SearchData("type", printWriter);
 				stName = SearchData("name", printWriter);
-				stLabel = SearchData("label", printWriter);
+				stLabel = SearchData("label", printWriter);	
+				stPiece = "" ;
+				stPiece = SearchData("tags", printWriter);
+				if (stPiece.equals("NoData")) 
+					stPiece = "" ;
+				else
+					stPiece =stPiece.replace('"',' ').trim() ;
 				if (stType.equals("Switch"))
-					inType = Constants.CST_iTypeLamp;
+					inType = DomoHub.CST_iTypeLamp;
 				else if (stType.equals("Dimmer"))
-					inType = Constants.CST_iTypeGrad;
-				else if (stType.equals("Rolershutter"))
-					inType = Constants.CST_iTypeVolet;
-				if (inType > 0)
-					Constants.dataItems.add (new Item (stName, stLabel, inType, "NULL", stState)) ;
+					inType = DomoHub.CST_iTypeGrad;
+				else if (stType.equals("Rollershutter"))
+					inType = DomoHub.CST_iTypeVolet;
+				if ((inType > 0) && (!stName.startsWith("Amazon")))
+					DomoHub.dataItems.add (new Element (stName, stLabel, inType, stPiece, stState)) ;
 				//printWriter.println("iOffsetShellMQTT End : " + iOffsetShellMQTT + "<br>");
-				if (printWriter != null) printWriter.println("Final Out : <br> Name : " + stName + "<br>State : " + stState + "<br>Type : " + stType + "<br> Label : " + stLabel);
+				//if (printWriter != null) printWriter.println("Final Out : Name:" + stName + " -- State:" + stState + " -- Type:" + stType + " -- Label:" + stLabel+" -- Piece:"+stPiece+"<br>");
 				inType = 0;
 				
 			}
-
-			
-			
+		}
 	} 
 	
 	private static String SearchData (String stSearch, PrintWriter printwriter)
@@ -112,9 +113,12 @@ public class Item {
 		int index = stDataShellMQTT.indexOf(stSearch);
 		
 		if (index < 0)
+		{
+			//printwriter.println(".. Pas trouvé<br>");
 			return "NoData";
+		}
 		//printwriter.println("index of \"" + stSearch + "\" is : " + index + "<br>");
-		stDataShellMQTT = stDataShellMQTT.substring(index+5+3);
+		stDataShellMQTT = stDataShellMQTT.substring(index+stSearch.length()+3).trim();
 		iOffsetShellMQTT = index;
 		stData = GetData(stSearch, printwriter);
 		stDataShellMQTT = stDataShellMQTT.substring(iOffsetShellMQTT);
@@ -126,7 +130,24 @@ public class Item {
 	{
 		String stData = "";
 		
-		int indexFin = stDataShellMQTT.indexOf("\",");
+		// la fin de l'élément peut être " ou ]
+		int index1 = stDataShellMQTT.indexOf("]");
+		int index2 = stDataShellMQTT.indexOf("\",");
+		int indexFin = 0 ;
+		
+		if (index2 == -1)
+			indexFin = index1 ; 
+		else
+		{
+			if (index1 < index2)
+				indexFin = index1 ;
+			else
+				indexFin = index2 ;
+		}
+		if (indexFin < 0)
+		{
+			return "NoData";
+		}
 		//printwriter.println("index end of \"" + stSearch + "\" is : " + indexFin + "<br>");
 		stData = stDataShellMQTT.substring(0, indexFin);
 		iOffsetShellMQTT = indexFin;
@@ -138,9 +159,9 @@ public class Item {
 	public static ArrayList<String> getListePieces ()
 	{
 		ArrayList<String> listePieces = new ArrayList<String>(); ;
-		for (int i=0; i<Constants.dataItems.size(); i++)
+		for (int i=0; i<DomoHub.dataItems.size(); i++)
 		{
-			String myPiece = Constants.dataItems.get(i).stPiece ; 
+			String myPiece = DomoHub.dataItems.get(i).stPiece ; 
 			boolean bTrouve = false ;
 			if (listePieces != null)
 			{

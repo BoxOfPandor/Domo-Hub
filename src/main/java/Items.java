@@ -1,8 +1,14 @@
 
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
+
+import classes.DomoHub;
+import classes.Element;
+import classes.MQTT;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -29,14 +35,29 @@ public class Items extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String stCodePiece = "" ;
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String  stCodePiece = "" ;
+		boolean bTraite = false ; 
+		String  stActionItem = "";
+		String  stValueItem = "" ;
 			
 		response.setContentType("text/html");
         PrintWriter printWriter  = response.getWriter();
 
         if (request.getParameter("Pieces") != null)
         	stCodePiece = request.getParameter("Pieces");
+
+		// Récupère l'éventuelle action à faire
+		Enumeration<String> enumeration = request.getParameterNames();
+	    while ((enumeration.hasMoreElements()) && (bTraite == false))
+	    {
+    	    String parameterName = (String) enumeration.nextElement();
+    	    if (parameterName.startsWith("Item_"))
+    	    {
+    	    	bTraite = true ;
+    	    	stActionItem = parameterName.substring(5).trim() ;
+    	    	stValueItem = request.getParameter(parameterName);
+    	    }
+    	}
 
 		// En tête général
         printWriter.println("<!DOCTYPE html>") ; 
@@ -67,7 +88,7 @@ public class Items extends HttpServlet {
         printWriter.println("<table width=\"100%\" id=\"contentgray\"><caption>Choix de la pièce</caption><tr><td> ");
         
         // Checkboxes de choix des pièces
-        ArrayList<String> stListePieces = Item.getListePieces ( ) ; 
+        ArrayList<String> stListePieces = Element.getListePieces ( ) ; 
         int iCptPiece = 0 ;
     	String stEtat = "" ;
         printWriter.println("<tr><td> Pièces : ");
@@ -84,11 +105,41 @@ public class Items extends HttpServlet {
         printWriter.println("  <input type=\"hidden\" name=\"Action\" value=\"Refresh\" >  <input type=\"submit\" value=\"Rafraichir...\" class=\"LPbutton\">");
         printWriter.println("</td></tr>");
         printWriter.println("</table></form>");
-
 		printWriter.println("<br>");
+
+      	// Traite l'action à faire : 
+      	if (!stActionItem.equals(""))
+      	{
+      		// Envoi une requete MQTT pour forcer le nouvel état
+      		MQTT.setValueMQTT (stActionItem, stValueItem) ;
+      		printWriter.println("<p> Requete:" + MQTT.stTraceLastReq + "</p><br>");
+      		
+      		// Met à jour la donnée en mémoire
+      		boolean bTrouve = false ; 
+      		Element myItem = null ;
+    		myItem = getNextItem (stCodePiece, myItem)  ;
+			while ((myItem != null) && (bTrouve == false))
+			{
+				if (myItem.stIdItem.equals(stActionItem))
+				{
+					bTrouve = true ;
+					myItem.stState = stValueItem ; // par défaut
+					// cas particuliers
+					if ((stValueItem.equals("OFF")) && (myItem.iTypeItem == DomoHub.CST_iTypeGrad))
+						myItem.stState = "0" ; 
+					if (stValueItem.equals("Haut"))
+						myItem.stState = "100" ; 
+					if (stValueItem.equals("Bas"))
+						myItem.stState = "0" ; 
+					if (stValueItem.contains("%"))
+						myItem.stState = myItem.stState.substring(0, myItem.stState.indexOf("%")) ; 
+				}
+				myItem = getNextItem (stCodePiece, myItem)  ;
+			}
+      	}
 		
 		// Affichage des éléments dans un tableau à deux colonnes
-		Item myItem = null ;
+		Element myItem = null ;
 		int  iColonne = 1 ;
 		myItem = getNextItem (stCodePiece, myItem)  ;
 		if (myItem == null)  // Aucun item pour cette pièce
@@ -117,7 +168,7 @@ public class Items extends HttpServlet {
 			}
 			printWriter.println("</table>"); // tableau invisible
 		}
-		 
+
         // Footer
 		printWriter.println("</td></tr></table> ");
 		printWriter.println("<table id=\"content3\" style=\"color:#FFFFFF; background:#000000 \"> "); // 
@@ -125,10 +176,11 @@ public class Items extends HttpServlet {
 		printWriter.println(" </tr></table>");
         printWriter.println("</body>");
       	printWriter.println("</html>");
+      	
 	}
 
 
-	void printItem (PrintWriter printWriter, String stCodePiece, Item myItem)
+	void printItem (PrintWriter printWriter, String stCodePiece, Element myItem)
 	{
 		printWriter.println("    <table width=\"100%\" class=\"imagetable\" id=\"contentgray\" >"); // bloc item
         printWriter.println("    <tr><td width=80 align=\"center\"> " + "<img src=\"./img/" + getIcon (myItem)+ "\">" + "<br><font size='4'><b>"+ getValue (myItem)+ "</b></font></td>");
@@ -137,19 +189,19 @@ public class Items extends HttpServlet {
         printWriter.println("        <td width=\"20%\"><font size='1'>"+"["+myItem.stIdItem+"]"+"</font></td></tr>"); 
         printWriter.println("        <tr><td>" + "<form method=\"GET\" >");
 	    printWriter.println("            "+ "<input type=\"hidden\" name=\"" +"Pieces"+ "\"  value=\""+stCodePiece+"\" >");        
-        if (myItem.iTypeItem == Constants.CST_iTypeLamp)
+        if (myItem.iTypeItem == DomoHub.CST_iTypeLamp)
         {
 	        printWriter.println("            "+ addButton(myItem,"ON", "ON"));
     	    printWriter.println("            "+ addButton(myItem,"OFF", "OFF"));
         }
-        if (myItem.iTypeItem == Constants.CST_iTypeGrad)
+        if (myItem.iTypeItem == DomoHub.CST_iTypeGrad)
         {
     	    printWriter.println("            "+ addButton(myItem,"0", "OFF"));
 	        printWriter.println("            "+ addButton(myItem,"25", "25 %"));
 	        printWriter.println("            "+ addButton(myItem,"50", "50 %"));
 	        printWriter.println("            "+ addButton(myItem,"100", "100 %"));
         }
-        if (myItem.iTypeItem == Constants.CST_iTypeVolet)
+        if (myItem.iTypeItem == DomoHub.CST_iTypeVolet)
         {
 	        printWriter.println("            "+ addButton(myItem,"100", "Haut"));
     	    printWriter.println("            "+ addButton(myItem,"50", "50 %"));
@@ -162,10 +214,10 @@ public class Items extends HttpServlet {
         printWriter.println("    </td></tr></table>");
 	}
 
-	private String addButton (Item amyItem, String astValData, String astValAff)
+	private String addButton (Element amyItem, String astValData, String astValAff)
 	{
 		String stReturn = "" ;
-		stReturn = stReturn + "<input type=\"submit\" name=\"" +amyItem.stIdItem+ "\"  value=\""+astValAff+"\" " ;
+		stReturn = stReturn + "<input type=\"submit\" name=\"Item_" +amyItem.stIdItem+ "\"  value=\""+astValAff+"\" " ;
 		if (amyItem.stState.equals(astValData))
 			stReturn = stReturn + " disabled " ;
 		stReturn = stReturn + " > " ;
@@ -173,16 +225,16 @@ public class Items extends HttpServlet {
 		return stReturn ;
 	}
 
-	private Item getNextItem (String stCodePiece, Item amyItem) 
+	private Element getNextItem (String stCodePiece, Element amyItem) 
 	{
   		boolean bTrouvePrec = false ;
-  		Item    itNext = null ;
+  		Element    itNext = null ;
   		int     i = 0 ;
   		if (amyItem == null)
   			bTrouvePrec = true; 
-  		while ( (i < Constants.dataItems.size()) && (itNext == null))
+  		while ( (i < DomoHub.dataItems.size()) && (itNext == null))
    		{
-   			Item myItem = Constants.dataItems.get(i) ;
+   			Element myItem = DomoHub.dataItems.get(i) ;
    			if (bTrouvePrec == true)
    			{
 	   			if (myItem.stPiece.equals(stCodePiece))
@@ -195,20 +247,20 @@ public class Items extends HttpServlet {
    		return itNext ;
 	}
 
-	private String getIcon (Item myItem)
+	private String getIcon (Element myItem)
 	{
 		String stIcon = "" ;
 		if (myItem != null)
 		{
    			int iValue = 0 ;
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeLamp)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeLamp)
    			{
    				if (myItem.stState.equals("ON"))
    					stIcon = "lamp_on_48.png" ;
    				else
    					stIcon = "lamp_off_48.png" ;
    			}
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeGrad)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeGrad)
    			{
    				iValue = Integer.parseInt(myItem.stState.trim()) ;
    				if (iValue == 0)
@@ -216,7 +268,7 @@ public class Items extends HttpServlet {
    				else
    					stIcon = "gradateur2-on.png" ;
    			}	
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeVolet)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeVolet)
    			{
    				iValue = Integer.parseInt(myItem.stState.trim()) ;
    				if ((iValue > 95) && (stIcon.equals("")))
@@ -247,25 +299,25 @@ public class Items extends HttpServlet {
 	}
 	
 
-	private String getValue (Item myItem)
+	private String getValue (Element myItem)
 	{
 		String stValue = "" ;
 		if (myItem != null)
 		{
    			int iValue = 0 ;
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeLamp)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeLamp)
    			{
    				if (myItem.stState.equals("ON"))
    					stValue = "ON" ;
    				else
    					stValue = "OFF" ;
    			}
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeGrad)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeGrad)
    			{
    				iValue = Integer.parseInt(myItem.stState.trim()) ;
 				stValue = iValue + " %" ;
    			}	
-   			if (myItem.iTypeItem ==  Constants.CST_iTypeVolet)
+   			if (myItem.iTypeItem ==  DomoHub.CST_iTypeVolet)
    			{
    				iValue = Integer.parseInt(myItem.stState.trim()) ;
    				if (iValue < 5)
@@ -283,11 +335,8 @@ public class Items extends HttpServlet {
 	}
 	
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		doGet(request, response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 	}
-
-
 
 }

@@ -1,5 +1,6 @@
 
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -62,6 +63,7 @@ public class Logout extends HttpServlet {
 
       	HttpSession session = request.getSession();
       	session.invalidate();
+      	
 		
         // Footer
 		printWriter.println("</td></tr></table> ");
@@ -71,11 +73,11 @@ public class Logout extends HttpServlet {
         printWriter.println("</body>");
       	printWriter.println("</html>");
   
-      	/*session = request.getSession(true);
+      	session = request.getSession(true);
         String stRedirect = "./Home" ;
             
         if ( !stRedirect.equals("") )  
-    	  response.sendRedirect( stRedirect ) ; // force routage vers page spécifiée */
+    	  response.sendRedirect( stRedirect ) ; // force routage vers page spécifiée 
 	}
 
 	/**
